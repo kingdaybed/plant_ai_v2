@@ -330,7 +330,9 @@
 
         const input = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
+        const form = document.querySelector('form');
 
+        // Show preview when image is selected
         input.addEventListener('change', function () {
 
             const file = this.files[0];
@@ -342,23 +344,33 @@
                 preview.style.display = 'block';
 
                 reader.onload = function (e) {
-
                     preview.src = e.target.result;
-
                 }
 
                 reader.readAsDataURL(file);
-
             }
 
         });
 
-        if ('serviceWorker' in navigator')
+        // Reset UI AFTER submit (important fix)
+        form.addEventListener('submit', function () {
 
-        {
+            setTimeout(() => {
 
+                // reset file input
+                input.value = "";
+
+                // hide preview again
+                preview.src = "";
+                preview.style.display = "none";
+
+            }, 100);
+
+        });
+
+        // Service worker fix (you had a syntax error before)
+        if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/static/sw.js');
-
         }
 
     </script>

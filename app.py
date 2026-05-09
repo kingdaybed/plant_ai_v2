@@ -12,6 +12,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+model = None
+labels = []
+
+def load_model_once():
+    global model, labels
+    if model is None:
+        model = tf.keras.models.load_model('model/plant_model.h5')
+        with open("labels.txt", "r") as f:
+            labels = [line.strip() for line in f.readlines()]
+
 #model = tf.keras.models.load_model('model/plant_model.h5')
 
 #with open("labels.txt", "r") as f:
@@ -20,18 +30,16 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def predict_plant(img_path):
 
+    load_model_once()  # 👈 ADD THIS LINE
+
     img = image.load_img(img_path, target_size=(224, 224))
-
     img_array = image.img_to_array(img)
-
     img_array = np.expand_dims(img_array, axis=0)
-
     img_array = img_array / 255.0
 
     prediction = model.predict(img_array)
 
     predicted_class = labels[np.argmax(prediction)]
-
     confidence = np.max(prediction) * 100
 
     return predicted_class, confidence

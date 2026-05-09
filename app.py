@@ -12,10 +12,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-model = tf.keras.models.load_model('model/plant_model.h5')
+#model = tf.keras.models.load_model('model/plant_model.h5')
 
-with open("labels.txt", "r") as f:
-    labels = [line.strip() for line in f.readlines()]
+#with open("labels.txt", "r") as f:
+    #labels = [line.strip() for line in f.readlines()]
 
 
 def predict_plant(img_path):

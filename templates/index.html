@@ -4,20 +4,49 @@
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Plant AI Detector</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
     <meta name="theme-color" content="#2a5298">
-
     <meta name="apple-mobile-web-app-capable" content="yes">
-
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon.png') }}">
+
+    <style>
+        /* Simple preview styling (optional UX upgrade) */
+        .preview-img {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .upload-box {
+            border: 2px dashed #2a5298;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .upload-box:hover {
+            background: #f0f6ff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            font-weight: bold;
+            color: #2a5298;
+            cursor: pointer;
+        }
+    </style>
 
 </head>
 
@@ -28,13 +57,25 @@
         <h1>🌿 Plant AI Detector</h1>
 
         <p class="subtitle">
-            Upload or capture a plant image to identify
-            its information, nutrients, benefits, and more.
+            Upload or capture a plant image to identify its information, nutrients, benefits, and more.
         </p>
 
+        <!-- FORM -->
         <form action="/predict" method="POST" enctype="multipart/form-data">
 
-            <input type="file" name="image" accept="image/*" required>
+            <!-- ✅ FULL FIX: Camera + Gallery enabled -->
+            <div class="upload-box">
+
+                <label for="fileInput" class="upload-label">
+                    📷 Tap to choose or take photo
+                </label>
+
+                <input id="fileInput" type="file" name="image" accept="image/*">
+
+                <!-- Preview -->
+                <img id="preview" class="preview-img">
+
+            </div>
 
             <br>
 
@@ -51,8 +92,7 @@
             <h2>{{ prediction }}</h2>
 
             <p class="confidence">
-                Confidence:
-                <span>{{ confidence }}%</span>
+                Confidence: <span>{{ confidence }}%</span>
             </p>
 
             <img src="{{ image_path }}" alt="Plant Image">
@@ -63,62 +103,50 @@
                     <h3>🌱 Scientific Name</h3>
                     <p>{{ scientific_name }}</p>
                 </div>
-
                 <div class="card">
                     <h3>🌿 Plant Type</h3>
                     <p>{{ plant_type }}</p>
                 </div>
-
                 <div class="card">
                     <h3>💚 Benefits</h3>
                     <p>{{ benefits }}</p>
                 </div>
-
                 <div class="card">
                     <h3>🥗 Nutrients</h3>
                     <p>{{ nutrients }}</p>
                 </div>
-
                 <div class="card">
                     <h3>🐄 Primary Consumers</h3>
                     <p>{{ primary_consumers }}</p>
                 </div>
-
                 <div class="card">
                     <h3>💊 Medicinal Uses</h3>
                     <p>{{ medicinal_uses }}</p>
                 </div>
-
                 <div class="card">
                     <h3>☠ Toxicity</h3>
                     <p>{{ toxicity }}</p>
                 </div>
-
                 <div class="card">
                     <h3>🌍 Habitat</h3>
                     <p>{{ habitat }}</p>
                 </div>
-
                 <div class="card">
                     <h3>💧 Water Requirement</h3>
                     <p>{{ water_requirement }}</p>
                 </div>
-
                 <div class="card">
                     <h3>☀ Sunlight Requirement</h3>
                     <p>{{ sunlight_requirement }}</p>
                 </div>
-
                 <div class="card">
                     <h3>🛠 Uses</h3>
                     <p>{{ uses }}</p>
                 </div>
-
                 <div class="card">
                     <h3>📈 Growth Rate</h3>
                     <p>{{ growth_rate }}</p>
                 </div>
-
                 <div class="card">
                     <h3>⏳ Lifespan</h3>
                     <p>{{ lifespan }}</p>
@@ -132,7 +160,28 @@
 
     </div>
 
+    <!-- JS: image preview -->
     <script>
+        const input = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                preview.style.display = "block";
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Service worker (PWA)
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/static/sw.js');
         }

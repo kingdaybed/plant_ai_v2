@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Plant Detector</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plant AI Detector</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
 
     <div class="container">
 
-        <h1>🌿 Plant Detector</h1>
+        <h1>🌿 Plant AI Detector</h1>
+
+        <p class="subtitle">
+            Upload or capture a plant image to identify
+            its information, nutrients, benefits, and more.
+        </p>
 
         <form action="/predict" method="POST" enctype="multipart/form-data">
 
-            <input type="file" name="image" required>
+            <input type="file" name="image" accept="image/*" capture="environment" required>
+
+            <br>
 
             <button type="submit">
                 Detect Plant
@@ -27,13 +40,83 @@
 
         <div class="result">
 
-            <img src="{{ image_path }}" width="250">
-
             <h2>{{ prediction }}</h2>
 
-            <h3>Confidence: {{ confidence }}%</h3>
+            <p class="confidence">
+                Confidence:
+                <span>{{ confidence }}%</span>
+            </p>
 
-            <h3>Type: {{ category }}</h3>
+            <img src="{{ image_path }}" alt="Plant Image">
+
+            <div class="info-grid">
+
+                <div class="card">
+                    <h3>🌱 Scientific Name</h3>
+                    <p>{{ scientific_name }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🌿 Plant Type</h3>
+                    <p>{{ plant_type }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>💚 Benefits</h3>
+                    <p>{{ benefits }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🥗 Nutrients</h3>
+                    <p>{{ nutrients }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🐄 Primary Consumers</h3>
+                    <p>{{ primary_consumers }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>💊 Medicinal Uses</h3>
+                    <p>{{ medicinal_uses }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>☠ Toxicity</h3>
+                    <p>{{ toxicity }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🌍 Habitat</h3>
+                    <p>{{ habitat }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>💧 Water Requirement</h3>
+                    <p>{{ water_requirement }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>☀ Sunlight Requirement</h3>
+                    <p>{{ sunlight_requirement }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🛠 Uses</h3>
+                    <p>{{ uses }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Growth Rate</h3>
+                    <p>{{ growth_rate }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>⏳ Lifespan</h3>
+                    <p>{{ lifespan }}</p>
+                </div>
+
+            </div>
 
         </div>
 

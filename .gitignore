@@ -3,3 +3,4 @@ __pycache__/
 dataset/
 *.pyc
 .env
+.h5

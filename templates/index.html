@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Plant Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🌿 Plant Detector</h1>
+
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+
+            <input type="file" name="image" required>
+
+            <button type="submit">
+                Detect Plant
+            </button>
+
+        </form>
+
+        {% if prediction %}
+
+        <div class="result">
+
+            <img src="{{ image_path }}" width="250">
+
+            <h2>{{ prediction }}</h2>
+
+            <h3>Confidence: {{ confidence }}%</h3>
+
+            <h3>Type: {{ category }}</h3>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

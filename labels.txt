@@ -1,0 +1,6 @@
+aloe_vera
+basil
+cactus
+mint
+orchid
+rose

@@ -1,0 +1,28 @@
+body {
+    font-family: Arial;
+    background: #dff5e1;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: green;
+    color: white;
+    font-size: 16px;
+}
+
+.result {
+    margin-top: 20px;
+}

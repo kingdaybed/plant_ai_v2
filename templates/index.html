@@ -300,7 +300,7 @@
 <body>
 
     <button class="dark-toggle" onclick="toggleDarkMode()">
-        🌙 Dark Mode
+        🌙
     </button>
 
     <div class="container">
@@ -376,7 +376,7 @@
                     <p class="extra-info">
                         {{ scientific_name_info }}
                         <br><br>
-                        <a href="{{ scientific_name_link }}" target="_blank" class="info-link">
+                        <a href="{{ scientific_name_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -394,7 +394,7 @@
                     <p class="extra-info">
                         {{ plant_type_info }}
                         <br><br>
-                        <a href="{{ plant_type_link }}" target="_blank" class="info-link">
+                        <a href="{{ plant_type_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -412,7 +412,7 @@
                     <p class="extra-info">
                         {{ benefits_info }}
                         <br><br>
-                        <a href="{{ benefits_link }}" target="_blank" class="info-link">
+                        <a href="{{ benefits_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -430,7 +430,7 @@
                     <p class="extra-info">
                         {{ nutrients_info }}
                         <br><br>
-                        <a href="{{ nutrients_link }}" target="_blank" class="info-link">
+                        <a href="{{ nutrients_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -448,7 +448,7 @@
                     <p class="extra-info">
                         {{ primary_consumers_info }}
                         <br><br>
-                        <a href="{{ primary_consumers_link }}" target="_blank" class="info-link">
+                        <a href="{{ primary_consumers_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -466,7 +466,7 @@
                     <p class="extra-info">
                         {{ medicinal_uses_info }}
                         <br><br>
-                        <a href="{{ medicinal_uses_link }}" target="_blank" class="info-link">
+                        <a href="{{ medicinal_uses_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -484,7 +484,7 @@
                     <p class="extra-info">
                         {{ toxicity_info }}
                         <br><br>
-                        <a href="{{ toxicity_link }}" target="_blank" class="info-link">
+                        <a href="{{ toxicity_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -502,7 +502,7 @@
                     <p class="extra-info">
                         {{ habitat_info }}
                         <br><br>
-                        <a href="{{ habitat_link }}" target="_blank" class="info-link">
+                        <a href="{{ habitat_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -520,7 +520,7 @@
                     <p class="extra-info">
                         {{ water_requirement_info }}
                         <br><br>
-                        <a href="{{ water_requirement_link }}" target="_blank" class="info-link">
+                        <a href="{{ water_requirement_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -538,7 +538,7 @@
                     <p class="extra-info">
                         {{ sunlight_requirement_info }}
                         <br><br>
-                        <a href="{{ sunlight_requirement_link }}" target="_blank" class="info-link">
+                        <a href="{{ sunlight_requirement_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -556,7 +556,7 @@
                     <p class="extra-info">
                         {{ uses_info }}
                         <br><br>
-                        <a href="{{ uses_link }}" target="_blank" class="info-link">
+                        <a href="{{ uses_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -574,7 +574,7 @@
                     <p class="extra-info">
                         {{ growth_rate_info }}
                         <br><br>
-                        <a href="{{ growth_rate_link }}" target="_blank" class="info-link">
+                        <a href="{{ growth_rate_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -592,7 +592,7 @@
                     <p class="extra-info">
                         {{ lifespan_info }}
                         <br><br>
-                        <a href="{{ lifespan_link }}" target="_blank" class="info-link">
+                        <a href="{{ lifespan_url }}" target="_blank" class="info-link">
                             Learn more →
                         </a>
                     </p>
@@ -620,55 +620,41 @@
 
             const file = this.files[0];
 
-            if (file) {
+            if (!file) return;
 
-                const reader = new FileReader();
+            const reader = new FileReader();
 
-                preview.style.display = "block";
+            preview.style.display = "block";
 
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
 
-                reader.readAsDataURL(file);
-            }
-
+            reader.readAsDataURL(file);
         });
 
         // =========================
-        // HIDE IMAGE ON DETECT (SUBMIT)
+        // HIDE IMAGE ON DETECT
         // =========================
         form.addEventListener('submit', function () {
 
+            // allow Flask request first, then hide
             setTimeout(() => {
                 preview.style.display = "none";
                 input.value = "";
-            }, 100);
+            }, 50);
 
         });
 
         // =========================
-        // CARD EXPAND / COLLAPSE
+        // CARD EXPAND / COLLAPSE (CLEAN VERSION)
         // =========================
         document.addEventListener("DOMContentLoaded", function () {
 
             document.querySelectorAll(".card").forEach(card => {
 
-                const extra = card.querySelector(".extra-info");
-
-                // start hidden
-                if (extra) extra.style.display = "none";
-
                 card.addEventListener("click", () => {
-
-                    if (!extra) return;
-
-                    if (extra.style.display === "none") {
-                        extra.style.display = "block";
-                    } else {
-                        extra.style.display = "none";
-                    }
-
+                    card.classList.toggle("active");
                 });
 
             });
@@ -681,11 +667,10 @@
         function toggleDarkMode() {
             document.body.classList.toggle("dark");
 
-            if (document.body.classList.contains("dark")) {
-                localStorage.setItem("darkMode", "enabled");
-            } else {
-                localStorage.setItem("darkMode", "disabled");
-            }
+            localStorage.setItem(
+                "darkMode",
+                document.body.classList.contains("dark") ? "enabled" : "disabled"
+            );
         }
 
         window.addEventListener("load", () => {

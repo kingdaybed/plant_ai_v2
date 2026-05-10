@@ -117,19 +117,20 @@ def predict():
         lifespan_info=details.get("lifespan_info", ""),
 
         # links (optional safety fallback)
-        scientific_name_url=details.get("scientific_name_url", "#"),
-        plant_type_url=details.get("plant_type_url", "#"),
-        benefits_url=details.get("benefits_url", "#"),
-        nutrients_url=details.get("nutrients_url", "#"),
-        primary_consumers_url=details.get("primary_consumers_url", "#"),
-        medicinal_uses_url=details.get("medicinal_uses_url", "#"),
-        toxicity_url=details.get("toxicity_url", "#"),
-        habitat_url=details.get("habitat_url", "#"),
-        water_requirement_url=details.get("water_requirement_url", "#"),
-        sunlight_requirement_url=details.get("sunlight_requirement_url", "#"),
-        uses_url=details.get("uses_url", "#"),
-        growth_rate_url=details.get("growth_rate_url", "#"),
-        lifespan_url=details.get("lifespan_url", "#")
+        scientific_name_url=details.get("scientific_name_link"),
+        plant_type_url=details.get("plant_type_link"),
+        benefits_url=details.get("benefits_link"),
+        nutrients_url=details.get("nutrients_link"),
+        primary_consumers_url=details.get("primary_consumers_link"),
+        medicinal_uses_url=details.get("medicinal_uses_link"),
+        toxicity_url=details.get("toxicity_link"),
+        habitat_url=details.get("habitat_link"),
+        water_requirement_url=details.get("water_requirement_link"),
+        sunlight_requirement_url=details.get("sunlight_requirement_link"),
+        uses_url=details.get("uses_link"),
+        growth_rate_url=details.get("growth_rate_link"),
+        lifespan_url=details.get("lifespan_link"),
+        description_url=details.get("description_link"),
     )
 
 

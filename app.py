@@ -97,6 +97,7 @@ def predict():
             'index.html',
             prediction=plant,
             confidence=round(confidence, 2),
+            description=details["description"],
             scientific_name=details["scientific_name"],
             plant_type=details["plant_type"],
             benefits=details["benefits"],
@@ -110,7 +111,38 @@ def predict():
             uses=details["uses"],
             growth_rate=details["growth_rate"],
             lifespan=details["lifespan"],
+
+            scientific_name_info=details["scientific_name_info"],
+            plant_type_info=details["plant_type_info"],
+            benefits_info=details["benefits_info"],
+            nutrients_info=details["nutrients_info"],
+            primary_consumers_info=details["primary_consumers_info"],
+            medicinal_uses_info=details["medicinal_uses_info"],
+            toxicity_info=details["toxicity_info"],
+            habitat_info=details["habitat_info"],
+            water_requirement_info=details["water_requirement_info"],
+            sunlight_requirement_info=details["sunlight_requirement_info"],
+            uses_info=details["uses_info"],
+            growth_rate_info=details["growth_rate_info"],
+            lifespan_info=details["lifespan_info"],
+
+            scientific_name_url=details.get("scientific_name_url"),
+            plant_type_url=details.get("plant_type_url"),
+            benefits_url=details.get("benefits_url"),
+            nutrients_url=details.get("nutrients_url"),
+            primary_consumers_url=details.get("primary_consumers_url"),
+            medicinal_uses_url=details.get("medicinal_uses_url"),
+            toxicity_url=details.get("toxicity_url"),
+            habitat_url=details.get("habitat_url"),
+            water_requirement_url=details.get("water_requirement_url"),
+            sunlight_requirement_url=details.get("sunlight_requirement_url"),
+            uses_url=details.get("uses_url"),
+            growth_rate_url=details.get("growth_rate_url"),
+            lifespan_url=details.get("lifespan_url"),
+
             image_path="/static/uploads/" + filename
+
+
         )
 
     return render_template('index.html')

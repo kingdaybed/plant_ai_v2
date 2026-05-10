@@ -196,21 +196,16 @@ button:hover {
 }
 
 .card {
-
-    background: rgba(255, 255, 255, 0.12);
-
-    padding: 20px;
-
-    border-radius: 18px;
-
+    background: #f7fff7;
+    border-radius: 20px;
+    padding: 18px;
+    border: 1px solid #dcedc8;
+    cursor: pointer;
     transition: 0.3s;
 }
 
 .card:hover {
-
-    transform: translateY(-5px);
-
-    background: rgba(255, 255, 255, 0.18);
+    transform: scale(1.02);
 }
 
 .card h3 {

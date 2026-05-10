@@ -40,7 +40,6 @@ def predict_plant(img_path):
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255.0
 
-    # Run TFLite model
     interpreter.set_tensor(input_details[0]['index'], img_array.astype(np.float32))
     interpreter.invoke()
 
@@ -62,90 +61,76 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
 
-    file = request.files['image']
+    file = request.files.get('image')
 
-    # ✅ ADD THIS (IMPORTANT SAFETY CHECK)
-    if file.filename == "":
+    if not file or file.filename == "":
         return render_template("index.html")
 
-    if file:
+    # save image
+    filename = str(uuid.uuid4()) + ".jpg"
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
 
-        filename = str(uuid.uuid4()) + ".jpg"
+    # predict
+    plant, confidence = predict_plant(filepath)
 
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+    # safe fallback (IMPORTANT FIX)
+    details = plant_details.get(plant.lower(), {})
 
-        plant, confidence = predict_plant(filepath)
+    return render_template(
+        'index.html',
 
-        details = plant_details.get(plant.lower(), {
-            "scientific_name": "Unknown",
-            "plant_type": "Unknown",
-            "benefits": "No data available",
-            "nutrients": "No data available",
-            "primary_consumers": "Unknown",
-            "medicinal_uses": "No data available",
-            "toxicity": "Unknown",
-            "habitat": "Unknown",
-            "water_requirement": "Unknown",
-            "sunlight_requirement": "Unknown",
-            "uses": "Unknown",
-            "growth_rate": "Unknown",
-            "lifespan": "Unknown"
-        })
+        prediction=plant,
+        confidence=round(confidence, 2),
 
-        return render_template(
-            'index.html',
-            prediction=plant,
-            confidence=round(confidence, 2),
-            description=details["description"],
-            scientific_name=details["scientific_name"],
-            plant_type=details["plant_type"],
-            benefits=details["benefits"],
-            nutrients=details["nutrients"],
-            primary_consumers=details["primary_consumers"],
-            medicinal_uses=details["medicinal_uses"],
-            toxicity=details["toxicity"],
-            habitat=details["habitat"],
-            water_requirement=details["water_requirement"],
-            sunlight_requirement=details["sunlight_requirement"],
-            uses=details["uses"],
-            growth_rate=details["growth_rate"],
-            lifespan=details["lifespan"],
+        image_path="/static/uploads/" + filename,
 
-            scientific_name_info=details["scientific_name_info"],
-            plant_type_info=details["plant_type_info"],
-            benefits_info=details["benefits_info"],
-            nutrients_info=details["nutrients_info"],
-            primary_consumers_info=details["primary_consumers_info"],
-            medicinal_uses_info=details["medicinal_uses_info"],
-            toxicity_info=details["toxicity_info"],
-            habitat_info=details["habitat_info"],
-            water_requirement_info=details["water_requirement_info"],
-            sunlight_requirement_info=details["sunlight_requirement_info"],
-            uses_info=details["uses_info"],
-            growth_rate_info=details["growth_rate_info"],
-            lifespan_info=details["lifespan_info"],
+        # main values
+        description=details.get("description", "No data available"),
+        scientific_name=details.get("scientific_name", "Unknown"),
+        plant_type=details.get("plant_type", "Unknown"),
+        benefits=details.get("benefits", "No data available"),
+        nutrients=details.get("nutrients", "No data available"),
+        primary_consumers=details.get("primary_consumers", "Unknown"),
+        medicinal_uses=details.get("medicinal_uses", "No data available"),
+        toxicity=details.get("toxicity", "Unknown"),
+        habitat=details.get("habitat", "Unknown"),
+        water_requirement=details.get("water_requirement", "Unknown"),
+        sunlight_requirement=details.get("sunlight_requirement", "Unknown"),
+        uses=details.get("uses", "Unknown"),
+        growth_rate=details.get("growth_rate", "Unknown"),
+        lifespan=details.get("lifespan", "Unknown"),
 
-            scientific_name_url=details.get("scientific_name_url"),
-            plant_type_url=details.get("plant_type_url"),
-            benefits_url=details.get("benefits_url"),
-            nutrients_url=details.get("nutrients_url"),
-            primary_consumers_url=details.get("primary_consumers_url"),
-            medicinal_uses_url=details.get("medicinal_uses_url"),
-            toxicity_url=details.get("toxicity_url"),
-            habitat_url=details.get("habitat_url"),
-            water_requirement_url=details.get("water_requirement_url"),
-            sunlight_requirement_url=details.get("sunlight_requirement_url"),
-            uses_url=details.get("uses_url"),
-            growth_rate_url=details.get("growth_rate_url"),
-            lifespan_url=details.get("lifespan_url"),
+        # info text
+        scientific_name_info=details.get("scientific_name_info", ""),
+        plant_type_info=details.get("plant_type_info", ""),
+        benefits_info=details.get("benefits_info", ""),
+        nutrients_info=details.get("nutrients_info", ""),
+        primary_consumers_info=details.get("primary_consumers_info", ""),
+        medicinal_uses_info=details.get("medicinal_uses_info", ""),
+        toxicity_info=details.get("toxicity_info", ""),
+        habitat_info=details.get("habitat_info", ""),
+        water_requirement_info=details.get("water_requirement_info", ""),
+        sunlight_requirement_info=details.get("sunlight_requirement_info", ""),
+        uses_info=details.get("uses_info", ""),
+        growth_rate_info=details.get("growth_rate_info", ""),
+        lifespan_info=details.get("lifespan_info", ""),
 
-            image_path="/static/uploads/" + filename
-
-
-        )
-
-    return render_template('index.html')
+        # links (optional safety fallback)
+        scientific_name_url=details.get("scientific_name_url", "#"),
+        plant_type_url=details.get("plant_type_url", "#"),
+        benefits_url=details.get("benefits_url", "#"),
+        nutrients_url=details.get("nutrients_url", "#"),
+        primary_consumers_url=details.get("primary_consumers_url", "#"),
+        medicinal_uses_url=details.get("medicinal_uses_url", "#"),
+        toxicity_url=details.get("toxicity_url", "#"),
+        habitat_url=details.get("habitat_url", "#"),
+        water_requirement_url=details.get("water_requirement_url", "#"),
+        sunlight_requirement_url=details.get("sunlight_requirement_url", "#"),
+        uses_url=details.get("uses_url", "#"),
+        growth_rate_url=details.get("growth_rate_url", "#"),
+        lifespan_url=details.get("lifespan_url", "#")
+    )
 
 
 # =========================
